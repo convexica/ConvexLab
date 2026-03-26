@@ -1,0 +1,59 @@
+# Python & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.tox/
+.nox/
+pip-wheel-metadata/
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Data & Documents (Institutional Exclusions)
+data/
+*.csv
+*.xlsx
+*.json
+cookies.txt
+.env
+*.log
+*.bak
+*.tmp
+*.temp
+
+# Streamlit (Exclude secrets!)
+.streamlit/secrets.toml
+
+# Internal Project History
+project_history_and_context.md
+walkthrough.md
+
+# IDEs & System
+.vscode/
+.idea/
+*.swp
+*.swo
+.ipynb_checkpoints/
+.gemini/
+.agents/
+.agent/
+.DS_Store
+Thumbs.db
+
+# Build & Dist
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+!.devcontainer/
+!.devcontainer/*.json

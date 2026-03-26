@@ -1,0 +1,39 @@
+[project]
+name = "india-fund-analytics"
+version = "0.1.4"
+description = "A high-performance quantitative analysis dashboard for Indian Mutual Funds."
+authors = [
+    {name = "Convexica", email = "app@convexica.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "streamlit",
+    "pandas",
+    "numpy",
+    "plotly",
+    "yfinance",
+    "scipy",
+    "statsmodels",
+    "playwright"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff"
+]
+
+[project.urls]
+"Homepage" = "https://india-fund-analytics.streamlit.app/"
+"Repository" = "https://github.com/convexica/india-fund-analytics"
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["app"]

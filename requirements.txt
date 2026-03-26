@@ -1,0 +1,12 @@
+# --- Core Dashboard Dependencies ---
+streamlit
+pandas
+numpy
+plotly
+yfinance
+scipy
+statsmodels
+
+# --- Automation & Testing ---
+playwright
+pytest
