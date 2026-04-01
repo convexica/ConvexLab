@@ -88,7 +88,7 @@ class MFDataFetcher:
         try:
             # Using raw.githubusercontent.com to fetch the latest CSV from our orphan branch
             # Repository URL is derived from established professional metadata
-            repo_base = "https://raw.githubusercontent.com/convexica/india-fund-analytics/data-cache"
+            repo_base = "https://raw.githubusercontent.com/convexica/convexlab/data-cache"
             url = f"{repo_base}/data/cache/{filename}"
 
             target_path = self.cache_dir / filename

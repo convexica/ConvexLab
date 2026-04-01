@@ -1,4 +1,4 @@
-name: CI Guardian (Institutional-Grade)
+name: CI Guardian (Professional-Grade)
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

@@ -1,4 +1,4 @@
-name: Keep Streamlit App Alive
+name: Professional App Keep-Alive
 
 on:
   schedule:

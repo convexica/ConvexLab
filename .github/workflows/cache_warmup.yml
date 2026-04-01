@@ -1,4 +1,4 @@
-name: Institutional Cache Pre-warm
+name: Professional Cache Pre-warm
 
 on:
   schedule:
@@ -38,7 +38,7 @@ jobs:
             cp -r data/cache/* /tmp/managed_cache/
           fi
 
-          git config --global user.name "Institutional-Bot"
+          git config --global user.name "ConvexLab-Bot"
           git config --global user.email "bot@convexica.com"
 
           # 2. Switch to a dedicated orphan branch and WIPE EVERYTHING

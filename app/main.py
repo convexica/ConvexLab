@@ -130,13 +130,13 @@ Riverside_Cache_Breaker = "2.3.0"
 
 # Sidebar - Search and Selection
 with st.sidebar:
-    # Professional Identity: 🔬 ConvexLab
+    # Professional Identity: 🔬 ConvexLab v1.0.0
     st.markdown("<h1 style='margin-top: 15px; font-size: 1.6rem; font-weight: 700; margin-bottom: 0px;'>🔬 ConvexLab</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: -5px; margin-bottom: 5px;'>Portfolio Intelligence and Analytics</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: -5px; margin-bottom: 5px;'>Portfolio Intelligence and Analytics | v1.0.0</p>", unsafe_allow_html=True)
 
     # High-Density Headers: Harmonized Spacing
     st.markdown(
-        "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; " "padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>🎯 Asset Selection</p>",
+        "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>🎯 Asset Selection</p>",
         unsafe_allow_html=True,
     )
 
@@ -185,7 +185,7 @@ with st.sidebar:
 
     # Horizon Horizon Selection
     st.markdown(
-        "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; " "padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>⏳ Horizon</p>",
+        "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>⏳ Horizon</p>",
         unsafe_allow_html=True,
     )
     analysis_period = st.radio("Period", ["All Time", "1 Year", "3 Years", "5 Years", "10 Years", "Custom Range"], index=0, label_visibility="collapsed")
@@ -204,7 +204,7 @@ with st.sidebar:
 
     # Technical Calibration (How)
     st.markdown(
-        "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; " "padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>⚙️ Calibration</p>",
+        "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>⚙️ Calibration</p>",
         unsafe_allow_html=True,
     )
     # Fetch real-time rate for initial calibration (fallback to 6.5)

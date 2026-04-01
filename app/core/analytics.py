@@ -381,7 +381,10 @@ class MFAnalytics:
 
     @st.cache_data(show_spinner=False)
     def calculate_rolling_return_profile(_self, nav_series: pd.Series, bench_nav_series: Optional[pd.Series] = None) -> Dict[str, Any]:
-        """Generate statistical profiles for standard rolling horizons including Outperformance."""
+        """
+        Generate statistical profiles for standard rolling horizons including Outperformance.
+        Updated: 2026-04-01 (v2.3.0 Signature Sync)
+        """
         profile: Dict[str, Any] = {}
         horizons = {1: "1 Year", 3: "3 Years", 5: "5 Years", 7: "7 Years", 10: "10 Years"}
 
@@ -519,9 +522,7 @@ class MFAnalytics:
         report.extend(["\n## 🧬 Performance Consistency (Rolling Profiles)", "| Window | Median | Max | Min | Outperformance % |", "| :--- | :--- | :--- | :--- | :--- |"])
         for label, stats in rolling_profiles.items():
             if isinstance(stats, dict):
-                report.append(
-                    f"| {label} | {stats.get('Median Return', 0):.1%} | {stats.get('Maximum Return', 0):.1%} | " f"{stats.get('Minimum Return', 0):.1%} | {stats.get('Outperformance', 0):.0%} |"
-                )
+                report.append(f"| {label} | {stats.get('Median Return', 0):.1%} | {stats.get('Maximum Return', 0):.1%} | {stats.get('Minimum Return', 0):.1%} | {stats.get('Outperformance', 0):.0%} |")
 
         # Add Stress Scenarios
         report.extend(["\n## 🛡️ Historical Resilience (Market Stress Scenarios)", "| Crisis Event | Fund Performance | Benchmark | Capture Ratio |", "| :--- | :--- | :--- | :--- |"])

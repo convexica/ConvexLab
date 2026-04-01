@@ -1,6 +1,6 @@
 [project]
-name = "india-fund-analytics"
-version = "0.2.0"
+name = "convexlab"
+version = "1.0.0"
 description = "A high-performance quantitative analysis dashboard for Indian Mutual Funds."
 authors = [
     {name = "Convexica", email = "app@convexica.com"}
@@ -31,7 +31,7 @@ dev = [
 
 [project.urls]
 "Homepage" = "https://convexlab.streamlit.app/"
-"Repository" = "https://github.com/convexica/india-fund-analytics"
+"Repository" = "https://github.com/convexica/convexlab"
 
 [tool.ruff]
 line-length = 200
@@ -57,3 +57,6 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.uv]
+package = false

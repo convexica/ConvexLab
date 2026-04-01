@@ -59,8 +59,8 @@ graph TD
 
 ### 1. Clone & Initialize
 ```bash
-git clone https://github.com/convexica/india-fund-analytics.git
-cd india-fund-analytics
+git clone https://github.com/convexica/convexlab.git
+cd convexlab
 python -m venv venv
 ```
 
