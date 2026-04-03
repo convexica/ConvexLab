@@ -1,7 +1,7 @@
 [project]
 name = "convexlab"
-version = "1.0.0"
-description = "A high-performance quantitative analysis dashboard for Indian Mutual Funds."
+version = "1.1.0"
+description = "Institutional-Grade Mutual Fund Analytics & AI Synthesis Engine"
 authors = [
     {name = "Convexica", email = "app@convexica.com"}
 ]
@@ -16,7 +16,9 @@ dependencies = [
     "scipy",
     "statsmodels",
     "playwright",
-    "requests"
+    "requests",
+    "google-generativeai",
+    "groq"
 ]
 
 [dependency-groups]

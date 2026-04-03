@@ -480,37 +480,39 @@ class MFAnalytics:
         return result if isinstance(result, pd.DataFrame) else pd.DataFrame(result)
 
     def generate_ai_report_markdown(self, fund_name: str, benchmark_name: str, deep_metrics: List[dict], rolling_profiles: dict, stress_df: Optional[pd.DataFrame] = None) -> str:
-        """Generates a structured professional markdown report designed for AI synthesis."""
+        """
+        AI SYNTHESIS ENGINE (v1.1.0 Upgrade)
+        -----------------------------------
+        Implements a High-Conviction "Investment Memo" framework for automated performance forensics.
+
+        This engine consolidates multi-dimensional quantitative data (Rolling Returns, Capture Ratios,
+        Stress Forensics) into a dense, high-signal briefing designed for LLM synthesis.
+
+        Key Improvements in v1.1.0:
+        1. Fiduciary Persona: Instructs the AI to act as a Senior Quantitative Analyst.
+        2. Forensic Constraint: Mandates alpha-validity verdicts and downside capture forensic checks.
+        3. Deterministic Output: Uses [TAG]-based formatting for premium UI rendering in the frontend.
+        """
         if stress_df is None:
             stress_df = pd.DataFrame()
 
+        # Build report as a list of strings
         report = [
             "# ROLE",
-            "You are a Senior Quantitative Investment Analyst specializing in Portfolio Management "
-            "and Fiduciary Oversight. Your expertise lies in decoding complex fund "
-            "forensics to provide actionable risk-adjusted performance evaluations for investment "
-            "committees.",
-            "\n# TASK",
-            f"Analyze the provided quantitative data for the mutual fund: **{fund_name}**. You "
-            "must evaluate its performance through a rigorous analytical lens, focusing "
-            "specifically on defensive characteristics and structural return consistency relative "
-            f"to its primary benchmark: **{benchmark_name}**.",
-            "\n# ANALYTICAL PARAMETERS",
-            "1. **Capital Protection & Downside Analytics:**",
-            "    * **Drawdown Profile:** Analyze Magnitude, Time underwater, and Recovery.",
-            "    * **Capture Ratios:** Evaluate Upside/Downside; focus on Downside Efficiency.",
-            "2. **Return Consistency (Rolling Profile):**",
-            "    * **Rolling Returns:** Analyze 3Y and 5Y windows for persistence.",
-            "    * **Outperformance Probability:** Calculate frequency of benchmark-beating periods.",
-            "3. **Risk-Adjusted Efficiency:**",
-            "    * Synthesize Sharpe, Sortino, and Information Ratios to determine alpha justification vs downside volatility.",
-            "\n# DATA ASSETS",
-            "## 🏆 Performance Grid (Compounding & Efficiency)",
+            "You are a Senior Quantitative Investment Analyst specializing in portfolio construction, risk diagnostics, and fiduciary evaluation. "
+            "You produce investment-committee–grade analysis grounded strictly in provided data.",
+            "\n# OBJECTIVE",
+            f"Deliver a high-conviction, data-driven evaluation of the mutual fund **{fund_name}** relative to its benchmark **{benchmark_name}**, with emphasis on:",
+            "- Downside protection",
+            "- Return consistency",
+            "- Risk-adjusted alpha validity",
+            "\n# INPUT DATA",
+            "## 🏆 Performance Grid (1Y, 3Y, 5Y Horizons)",
             "| Period | Sharpe | Sortino | Info Ratio | Alpha | Beta | Batting Avg | Up/Down Efficiency | Upside | Downside |",
             "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
         ]
 
-        # Add all horizons from deep_metrics
+        # 1. Performance Data
         for m in deep_metrics:
             report.append(
                 f"| {m.get('Period', 'N/A')} | {m.get('Sharpe', 0):.2f} | {m.get('Sortino', 0):.2f} | {m.get('Info Ratio', 0):.2f} | "
@@ -518,14 +520,26 @@ class MFAnalytics:
                 f"{m.get('Upside / Downside', 0):.2f} | {m.get('Upside Capture', 0):.0%} | {m.get('Downside Capture', 0):.0%} |"
             )
 
-        # Add Rolling Profiles
-        report.extend(["\n## 🧬 Performance Consistency (Rolling Profiles)", "| Window | Median | Max | Min | Outperformance % |", "| :--- | :--- | :--- | :--- | :--- |"])
+        # 2. Rolling Data
+        report.extend(
+            [
+                "\n## 🧬 Performance Consistency (Rolling Profiles)",
+                "| Window | Median | Max | Min | Outperformance % |",
+                "| :--- | :--- | :--- | :--- | :--- |",
+            ]
+        )
         for label, stats in rolling_profiles.items():
             if isinstance(stats, dict):
                 report.append(f"| {label} | {stats.get('Median Return', 0):.1%} | {stats.get('Maximum Return', 0):.1%} | {stats.get('Minimum Return', 0):.1%} | {stats.get('Outperformance', 0):.0%} |")
 
-        # Add Stress Scenarios
-        report.extend(["\n## 🛡️ Historical Resilience (Market Stress Scenarios)", "| Crisis Event | Fund Performance | Benchmark | Capture Ratio |", "| :--- | :--- | :--- | :--- |"])
+        # 3. Stress Data
+        report.extend(
+            [
+                "\n## 🛡️ Historical Resilience (Market Stress Scenarios)",
+                "| Crisis Event | Fund Performance | Benchmark | Capture Ratio |",
+                "| :--- | :--- | :--- | :--- |",
+            ]
+        )
         if not stress_df.empty:
             for _, row in stress_df.iterrows():
                 cap_val = row.get("Capture Ratio", "-")
@@ -534,19 +548,101 @@ class MFAnalytics:
         else:
             report.append("| No history for major crises | - | - | - |")
 
+        # 4. Framework & Rules
         report.extend(
             [
-                "\n# CONSTRAINTS & RIGOR",
-                "* **Tone:** Professional, objective, and technical.",
-                "* **Evidence-Based:** Supporting claims with provided data points.",
-                "* **Risk Focus:** Focus on Portfolio Characteristics, Liquidity, and Fiduciary Suitability.",
-                "\n# OUTPUT STRUCTURE",
-                "1. **Executive Summary:** A 2-sentence high-level verdict.",
-                "2. **Quantitative Breakdown:** Sub-sections on Defensive Fortitude and Structural Consistency.",
-                "3. **Tactical Actionables:** Exactly 3 high-impact recommendations.",
+                "\n# ANALYTICAL FRAMEWORK",
+                "## 1. Downside Protection & Capital Preservation",
+                "- Evaluate drawdowns (depth, duration, recovery time)",
+                "- Assess downside capture vs benchmark (primary signal)",
+                "- Compare asymmetry: upside vs downside capture",
+                "- Explicitly identify whether alpha is generated defensively or cyclically",
+                "\n## 2. Return Consistency & Reliability",
+                "- Analyze rolling 3Y and 5Y distributions (median vs dispersion)",
+                "- Estimate consistency via:",
+                "  - Frequency of outperformance vs benchmark",
+                "  - Stability of excess returns across periods",
+                "- Identify regime dependency (does performance cluster in specific environments?)",
+                "\n## 3. Risk-Adjusted Efficiency",
+                "- Interpret Sharpe, Sortino, and Information ratios jointly (not in isolation)",
+                "- Determine if excess returns are:",
+                "  - Persistent and skill-based",
+                "  - Or volatility-driven / unstable",
+                "- Penalize high volatility or weak downside control even if returns are high",
+                "\n# CRITICAL RULES",
+                "- Use ONLY the provided data (no assumptions, no external knowledge)",
+                "- Quantify wherever possible (e.g., “outperformed in ~65% of rolling periods”)",
+                "- If data is insufficient for a conclusion, explicitly state the limitation",
+                "- Prioritize downside risk over absolute return",
+                "- Avoid generic statements; every claim must tie to a metric",
+                "\n# OUTPUT FORMAT",
+                "You must return the analysis using the specific TAGS below. Do NOT use markdown headers (# or ##) or bold titles in your response. The app will handle the styling.",
+                "\n[SUMMARY]",
+                "Provide the 2-sentence high-level verdict here.",
+                "\n[BREAKDOWN]",
+                "Provide the forensic breakdown. Every bullet MUST start with a **Bold Headline Summary:** followed by clear details.",
+                "\n[ACTIONABLES]",
+                "Provide EXACTLY 3 high-impact recommendations. Every bullet MUST start with a **Bold Action Title:** followed by the rationale.",
+                "\n# SUCCESS CRITERIA",
+                "- High signal density | No hashtags | No bold headers",
+                "- **Scanability:** Every bullet point MUST begin with a **2-3 word bold summary header**.",
+                "- **Scanability:** BOLD all key metrics, percentages, and conclusive verdicts (e.g., **Strong Alpha** or **17.9% Median**).",
+                "- **Crucial:** Use ONLY the [TAGS] as section separators.",
                 "\n---",
-                "**Analyst Task:** Decipher the data above and generate the Performance Evaluation Report.",
+                "**Analyst Task:** Decipher the data and generate the memo (Scanable Bolding required).",
             ]
         )
 
         return "\n".join(report)
+
+    def generate_live_report(self, markdown_brief: str) -> str:
+        """
+        Attempts to generate a live analytical report by calling Groq or Gemini API directly.
+        Uses st.secrets for secure key management and prioritizes Groq for speed/privacy.
+        """
+        import streamlit as st
+
+        # 1. Groq Implementation: Priority for speed and Llama-3 accuracy
+        if "GROQ_API_KEY" in st.secrets:
+            try:
+                from groq import Groq
+
+                client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+                logger.info("Executing Groq request (llama-3.3-70b-versatile)...")
+                chat_completion = client.chat.completions.create(
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "You are a professional investment analyst. Use the provided quantitative data to generate a multi-section markdown report.",
+                        },
+                        {"role": "user", "content": markdown_brief},
+                    ],
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.4,
+                )
+                return str(chat_completion.choices[0].message.content)
+            except Exception as e:
+                logger.warning(f"Groq generation failed, falling back to Gemini: {e}")
+
+        # 2. Gemini Implementation: Generous free tier
+        if "GEMINI_API_KEY" in st.secrets:
+            try:
+                import google.generativeai as genai
+
+                logger.info("Executing Gemini request (gemini-2.0-flash)...")
+                genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+                model = genai.GenerativeModel("gemini-2.0-flash")
+                response = model.generate_content(markdown_brief)
+                return response.text
+            except Exception as e:
+                logger.error(f"Gemini generation failed: {e}")
+                return f"⚠️ **AI Execution Error:** {e}\n\nFalling back to the briefing below for manual analysis."
+
+        # 3. Fallback: Return a helpful message if no keys are configured
+        return (
+            "⚠️ **Live Agent Offline:** No API keys (GROQ_API_KEY or GEMINI_API_KEY) found in Streamlit Secrets.\n\n"
+            "### Instructions for Activation:\n"
+            "1. Open your Streamlit Dashboard Settings.\n2. Go to **Secrets**.\n"
+            '3. Add your key: `GROQ_API_KEY = "your_key"`.\n\n'
+            "**Analyst Briefing:** (Copy the code block below to your preferred assistant)"
+        )

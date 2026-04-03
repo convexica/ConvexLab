@@ -8,6 +8,9 @@ scipy
 statsmodels
 playwright
 requests
+# --- AI Synthesis Engine (v1.1.0 Update) ---
+groq
+google-generativeai
 
 # --- Professional Toolchain (Local Only) ---
 pytest

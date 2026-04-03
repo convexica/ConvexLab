@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from typing import Any, Dict, Optional, Tuple
 
@@ -30,7 +31,7 @@ from core.logger import get_logger, log_event  # noqa: E402
 logger = get_logger(__name__)
 
 # Page Configuration
-st.set_page_config(page_title="ConvexLab | Performance Analytics", page_icon="🔬", layout="wide")
+st.set_page_config(page_title="ConvexLab | Portfolio Intelligence", page_icon="🔬", layout="wide")
 
 st.markdown(
     """
@@ -132,7 +133,7 @@ Riverside_Cache_Breaker = "2.3.0"
 with st.sidebar:
     # Professional Identity: 🔬 ConvexLab v1.0.0
     st.markdown("<h1 style='margin-top: 15px; font-size: 1.6rem; font-weight: 700; margin-bottom: 0px;'>🔬 ConvexLab</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: -5px; margin-bottom: 5px;'>Portfolio Intelligence and Analytics | v1.0.0</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: -5px; margin-bottom: 5px;'>Portfolio Intelligence and Analytics</p>", unsafe_allow_html=True)
 
     # High-Density Headers: Harmonized Spacing
     st.markdown(
@@ -688,25 +689,140 @@ if selected_code:
         # 🧠 AI Insight Integration: Verticalized for direct user-flow
         st.markdown("<br>", unsafe_allow_html=True)
 
+        st.info("Transform quantitative insights into a structured investment report.")
+
         c_btn1, _, _, _ = st.columns(4)
         with c_btn1:
             if st.button("🧠 Generate AI Report", type="primary", use_container_width=True):
-                # Pass local forensic profile and stress results directly to reporter
-                ai_report = analytics.generate_ai_report_markdown(
+                # 1. Generate the Quantitative Briefing
+                briefing = analytics.generate_ai_report_markdown(
                     fund_name=selected_name, benchmark_name=benchmark_name, deep_metrics=deep_metrics, rolling_profiles=fund_profile, stress_df=pd.DataFrame(stress_res)
                 )
-                st.session_state["ai_report_cache"] = ai_report
-                st.toast("Report Ready!", icon="🧠")
+                st.session_state["ai_report_briefing"] = briefing
 
-        st.info("Transform quantitative insights into a structured investment report, optimized for synthesis across AI platforms.")
+                # 2. Attempt Live Synthesis
+                # 2. Attempt Live Synthesis – use a placeholder so the caption disappears after completion
+                placeholder = st.empty()
+                placeholder.caption("🔬 Analyst is synthesizing forensics...")
+                live_report = analytics.generate_live_report(briefing)
+                st.session_state["live_ai_report"] = live_report
+                placeholder.empty()  # remove the caption
+                st.toast("Analysis Complete!", icon="✅")
 
-        if "ai_report_cache" in st.session_state:
-            st.caption("💡 **Tip:** Click the copy icon on the top-right of the box and run it in your preferred AI assistant to generate a structured investment report.")
-            st.code(st.session_state["ai_report_cache"], language="markdown")
+        if "ai_report_briefing" in st.session_state:
+            with st.expander("📊 Analyst Briefing — (For deeper forensics, copy this into your preferred AI assistant)"):
+                st.caption("💡 **Tip:** Use the **copy icon** on the top right of the code block below to quickly paste this data into your preferred AI assistant.")
+                st.code(st.session_state["ai_report_briefing"], language="markdown")
+
+        if "live_ai_report" in st.session_state:
+            # v1.1.0 UPGRADE: DETERMINISTIC UI RENDERER
+            # ----------------------------------------
+            # Implements a fail-safe analytical parser that decouples synthesis from styling.
+            # 1. Parsing: Extracts high-conviction content via institutional tags ([SUMMARY], etc.).
+            # 2. Quiet Luxury Styling: Injects state-of-the-art CSS for gold-left borders and a premium typography stack.
+            # 3. Hybrid Rendering: Combines Markdown (for body content) with HTML (for structural titles) for total UI stability.
+
+            # 🎨 Unified CSS and Content Renderer: No more "Ghost Boxes"
+            raw = st.session_state["live_ai_report"]
+            sects = {"[SUMMARY]": "", "[BREAKDOWN]": "", "[ACTIONABLES]": ""}
+
+            curr = None
+            for line in raw.split("\n"):
+                tg = line.strip()
+                if tg in sects:
+                    curr = tg
+                elif curr:
+                    sects[curr] += line + "\n"
+
+            # Clean and sanitize the sections: Convert remaining Markdown to Institutional HTML
+            def clean_sec(txt):
+                lines = txt.strip().split("\n")
+                res = []
+                for line in lines:
+                    cl = line.strip()
+                    # 1. Convert Bolding to Standard White Bold
+                    cl = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", cl)
+
+                    # 2. Handle Universal Bullets (* or -)
+                    if cl.startswith("- ") or cl.startswith("* "):
+                        bullet_content = cl[2:].strip()
+
+                        # 3. If Bullet starts with Topic Header (e.g., <b>...:</b>), turn it GOLD
+                        bullet_content = re.sub(r"^<b>(.*?):<\/b>", r"<span style='color: #d4af37; font-weight: 700;'>\1:</span>", bullet_content)
+
+                        res.append(f'<div class="bullet-item"><span class="bullet-dot">•</span><span class="bullet-text">{bullet_content}</span></div>')
+                    elif cl:
+                        res.append(cl)
+                return "".join(res)
+
+            # Build the Single, Atomic HTML block using a refined Institutional Layout
+            report_html = f"""<style>
+.brief-container {{
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-left: 10px solid #d4af37;
+    color: #e2e8f0;
+    margin-bottom: 35px;
+    font-family: 'Inter', system-ui, sans-serif;
+}}
+.brief-header {{
+    color: #d4af37 !important;
+    font-weight: 800 !important;
+    font-size: 1rem !important;
+    margin-bottom: 6px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    padding-bottom: 6px;
+}}
+.brief-content {{
+    margin-bottom: 25px !important;
+    line-height: 1.8 !important;
+    font-size: 1rem !important;
+}}
+.bullet-item {{
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}}
+.bullet-dot {{
+    color: #d4af37;
+    margin-right: 12px;
+    font-weight: 900;
+}}
+.bullet-text {{
+    flex: 1;
+}}
+</style>
+<div class="brief-container">
+<p class="brief-header">1. Executive Summary</p>
+<div class="brief-content">{clean_sec(sects["[SUMMARY]"])}</div>
+<p class="brief-header">2. Quantitative Breakdown</p>
+<div class="brief-content">{clean_sec(sects["[BREAKDOWN]"])}</div>
+<p class="brief-header">3. Tactical Actionables</p>
+<div class="brief-content" style="margin-bottom: 0px !important;">{clean_sec(sects["[ACTIONABLES]"])}</div>
+</div>"""
+
+            st.markdown("### 📝 Investment Brief")
+            st.markdown(report_html, unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
 
     else:
         st.error("Historical NAV data unavailable.")
 
 else:
     st.info("👈 Enter a fund name (e.g., 'HDFC Flexi' or 'SBI Bluechip') to begin deep analysis.")
-# Cache-Bust: 2026-04-01 17:10 (Precision Sync)
+
+# --- Institutional Fiduciary Disclosure & Disclaimer (Footer) ---
+st.divider()
+st.caption(
+    "⚠️ **Disclaimer & Fiduciary Notice:** All analytics, quantitative metrics, and AI-generated synthesis provided by **ConvexLab** are exclusively for **educational and informational purposes**. "
+    "These outputs represent historical data approximations and statistical modeling based on third-party public information. "
+    "**Important:** This application **does not constitute investment advice**, financial planning, or a professional recommendation to buy, sell, or hold any security. "
+    "Mutual fund investments are subject to market risks; please read all scheme-related documents carefully and consult with a qualified financial advisor before making any investment decisions. "
+    "**Convexica** and its developers assume no liability for potential inaccuracies or financial loss derived from the use of this dashboard."
+)
+
+# Cache-Bust: 2026-04-03 18:35:00 (v1.1.0 Production Ready)

@@ -1,22 +1,30 @@
-# 🔬 ConvexLab
+# 🔬 ConvexLab | Portfolio Intelligence (v1.1.0)
 
-A high-performance, professional quantitative analysis dashboard for Indian Mutual Funds. Evaluate performance, risk, and consistency using advanced financial metrics.
+A high-performance, institutional-grade quantitative analysis dashboard for Indian Mutual Funds. Evaluate performance, risk, and consistency using advanced financial metrics and **High-Conviction AI Synthesis**.
 
 > **Live Demo**: [convexlab.streamlit.app](https://convexlab.streamlit.app/)
 
 ---
 
-## 🚀 Core Capabilities
+## 🚀 v1.1.0 Special Edition: The AI Insight Agent
+
+ConvexLab now features a state-of-the-art **AI Synthesis Engine** designed to transform complex multi-dimensional data into institutional investment memos.
+
+*   🧠 **High-Conviction Synthesis**: Moves beyond generic summaries. The agent acts as a **Senior Quantitative Analyst**, providing definitive verdicts on alpha validity and downside behavior.
+*   ⚡ **Dual-Engine Architecture**: Integrated with **Groq (Llama-3.3-70B)** for ultra-low-latency forensics and **Google Gemini 1.5 Flash** as a robust fallback.
+*   ✨ **"Quiet Luxury" UI Rendering**: Custom-engineered **Deterministic CSS Container** with gold-left borders and institutional typography. No visible AI hashtags or formatting artifacts—just clean, decision-grade reports.
+*   📊 **Analyst Briefing Mode**: Generates a dense, quantitative markdown briefing that can be exported directly into external AI models for deeper private forensics.
+
+---
+
+## 🛠️ Core Quantitative Capabilities
 
 *   **Deep Performance Analysis**: Calculate CAGR, Absolute Growth, and Multiplier across multiple time horizons (1Y, 3Y, 5Y, 10Y, Max).
 *   **Risk & Efficiency**: Compute advanced risk-adjusted metrics like **Sharpe Ratio**, **Sortino Ratio**, **Calmar Ratio**, and **Omega Ratio**.
 *   🛡️ **Advanced Historical Stress-Testing**: Evaluate fund resilience during the **2024-25 (Market Correction)**, 2022 (Bear Market), COVID-19 Crash, 2018 NBFC Crisis, and the 2008 GFC.
-*   🧠 **AI Insight Agent**: Generate structured analytical reports optimized for synthesis across AI platforms (ChatGPT, Claude, Gemini).
-*   📊 **Convexica-branded Professional UI**: High-density interactive dashboard optimized for deep risk-return analysis with Deep Navy & Gold aesthetics.
-*   **Market Character**: Identify fund style using **Beta**, **Jensen's Alpha**, and **Information Ratio** against benchmarks (Nifty 50, Nifty 500).
-*   **Capture Dynamics**: Analyze **Upside & Downside Capture Ratios** and **Market Sensitivity** (OLS Trendlines) to understand behavior in varying market conditions.
-*   **Rolling Returns**: Generate detailed rolling return profiles illustrating the probability of beating bank FDs and the frequency of negative returns.
-*   **Consistency Metrics**: Measure trend intensity with the **Hurst Exponent (H)** and calculate **Batting Average** for outperformance frequency.
+*   **Market Character**: Identify fund style using **Beta**, **Jensen's Alpha**, and **Information Ratio** against benchmarks (Nifty 50, Nifty 500, Nifty 200).
+*   **Capture Dynamics**: Analyze **Upside & Downside Capture Ratios** to understand behavior in varying market regimes.
+*   **Rolling Returns**: Generate detailed rolling return distributions illustrating the probability of beating bank FDs and the frequency of negative returns.
 
 ---
 
@@ -30,28 +38,24 @@ graph TD
     UI --> Fetcher[Data Fetcher Module]
     Fetcher --> Cache[(Local CSV Cache)]
     Fetcher --> AMFI_API{AMFI API}
-    Fetcher --> YF_API{yFinance API}
+
+    UI --> AI[AI Insight Agent]
+    AI --> Groq[Groq Llama-3.3]
+    AI --> Gemini[Google Gemini]
 
     Fetcher --> Analytics[Analytics Engine]
     Analytics --> Math[Quantitative Math: Alpha/Beta/Sharpe]
     Math --> UI
-
-    subgraph "CI/CD Guardian"
-        Git[Push to GitHub] --> Linter[Ruff Style Check]
-        Linter --> Tester[Pytest Financial Logic]
-    end
+    Math --> AI
 ```
 
 ### Technical Stack
-*   **Frontend**: [Streamlit](https://streamlit.io/) for a reactive, data-driven user interface.
+*   **Intelligence Layer**: [Groq SDK](https://github.com/groq/groq-python) and [Google Generative AI](https://github.com/google-gemini/generative-ai-python).
+*   **Frontend**: [Streamlit](https://streamlit.io/) with custom **CSS Injection** for premium branding.
 *   **Visualization**: [Plotly](https://plotly.com/python/) for interactive, publication-quality financial charts.
 *   **Analytics Engine**: [Pandas](https://pandas.pydata.org/), [NumPy](https://numpy.org/), and [SciPy](https://scipy.org/) for vectorized financial computations.
-*   **Data Layer**: Custom robust integration with **AMFI API** (`mfapi.in`) with browser-mimicking headers and **yfinance** for index benchmarks.
-*   **Persistence**: Built-in local file-based caching in `data/cache/` to minimize API latency and handle throttling.
-*   **Observability**: Integrated **Structured Logging** for tracking API status, cache hits/misses, and error diagnostics.
-*   **Type Integrity**: Enforced **Static Type Hinting** with **Mypy**, ensuring data types across the financial engine are validated before execution.
-*   **Dependency Governance**: Uses **`uv`** for deterministic builds with a high-security `uv.lock` file, preventing "dependency drift."
-
+*   **Data Layer**: Custom robust integration with **AMFI API** (`mfapi.in`) and **yfinance** for index benchmarks.
+*   **Dependency Governance**: Uses **`uv`** for deterministic builds, ensuring version-locked reproducibility.
 
 ---
 
@@ -62,22 +66,23 @@ graph TD
 git clone https://github.com/convexica/convexlab.git
 cd convexlab
 python -m venv venv
+# Activate venv: source venv/bin/activate (Mac/Linux) or .\venv\Scripts\activate (Windows)
 ```
 
 ### 2. Install Dependencies
-Professional installations can use **`uv`** (recommended) for perfect reproducibility, or standard `pip`:
 ```bash
-# Production Standard (Perfectly reproducible)
+# Recommended (Fast & Deterministic)
 uv sync
 
-# Legacy Standard (Standard install)
+# Standard
 pip install -r requirements.txt
 ```
 
-### 3. Setup Automation (Optional)
-If you plan to run the keep-alive script or automated tests:
-```bash
-playwright install chromium
+### 3. Configure AI Secrets
+Create a `.streamlit/secrets.toml` file in the root directory:
+```toml
+GROQ_API_KEY = "your_groq_key_here"
+GEMINI_API_KEY = "your_gemini_key_here"
 ```
 
 ### 4. Run the Dashboard
@@ -90,40 +95,35 @@ streamlit run app/main.py
 ## 📁 Project Structure
 
 ```text
-├── .github/workflows/
-│   ├── ci_guardian.yml      # Automated Linting & Testing
-│   └── keep_alive.yml       # Cloud Instance Wake-up
+├── .github/workflows/       # CI/CD Guardian (Linting, Testing, Keep-Alive)
 ├── app/
-│   ├── main.py              # User Interface & Orchestration
+│   ├── main.py              # UI Orchestration & Deterministic AI Renderer
 │   ├── core/
-│   │   ├── analytics.py     # Financial Calculation Engine (Type-Hinted)
-│   │   └── data_fetcher.py  # API Management & Structured Logging
+│   │   ├── analytics.py     # Financial Engine & AI Prompt Framework
+│   │   └── data_fetcher.py  # API Management & Cache Logic
 │   └── components/
-│       └── charts.py        # Reusable Plotly Visualizations
-├── tests/
-│   └── test_analytics.py    # Unit Tests for Math Engine
-├── scripts/
-│   └── wake_app.py          # Streamlit Cloud keep-alive automation
-├── internal_docs/
-│   └── DEVELOPMENT_GUIDELINES.md # 🏗️ Architectural Laws (MUST READ)
-├── pyproject.toml           # Modern Project Configuration (PEP 621)
-├── requirements.txt         # Consolidated Dependencies
+│       └── charts.py        # Reusable Plotly Financial Visuals
+├── tests/                   # Automated Financial Validation
+├── internal_docs/           # Architectural Guidelines & KI Records
+├── pyproject.toml           # Modern Project Config (PEP 621)
 └── LICENSE                  # MIT License
 ```
 
-> ⚠️ **Contributors**: Before making any PRs, please read `internal_docs/DEVELOPMENT_GUIDELINES.md`. This project follows strict "Radical Modularity"—UI code must never mix with math logic.
+---
+
+## ⚙️ Quality Assurance
+*   **Linter**: Fast style checking with **Ruff**.
+*   **Type Guard**: Strict static analysis with **Mypy**.
+*   **Unit Tests**: Automated financial validation with **Pytest**.
+*   **Maintenance**: Managed by **Dependabot** for zero-effort security updates.
 
 ---
 
-## ⚙️ Deployment & Quality Assurance
+## 📄 License
+Distributed under the MIT License. See `LICENSE` for more information.
 
-*   **Deployment**: Hosted on **Streamlit Cloud**.
-*   **CI/CD**: Uses **GitHub Actions** for the **"CI Guardian"** workflow:
-    *   **Linter**: Fast style checking with **Ruff**.
-    *   **Type Guard**: Strict static analysis with **Mypy**.
-    *   **Unit Tests**: Automated financial validation with **Pytest**.
-*   **Automation**: A scheduled workflow runs every 6 hours using **Playwright** to prevent the instance from entering "sleep mode" on the free tier.
-*   **Sustainability**: Managed by **Dependabot** to keep dependencies secure and up-to-date with zero-effort maintenance.
+**Refining Alpha through Forensics 📈 [Convexica](https://convexica.com)**
+ro-effort maintenance.
 
 
 ---
