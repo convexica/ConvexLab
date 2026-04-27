@@ -26,6 +26,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest >= 9.0.3", # Security fix for CVE-2024-41126/tmpdir handling
+    "pygments >= 2.20.0", # Security fix for ReDoS
     "ruff",
     "mypy",
     "pre-commit",
