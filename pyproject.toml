@@ -25,7 +25,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pytest",
+    "pytest >= 9.0.3", # Security fix for CVE-2024-41126/tmpdir handling
     "ruff",
     "mypy",
     "pre-commit",
