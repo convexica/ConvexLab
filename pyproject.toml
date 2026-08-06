@@ -19,7 +19,7 @@ dependencies = [
     "requests",
     "google-generativeai",
     "groq",
-    "gitpython >= 3.1.47", # Security fix for CVE-2024-43404
+    "gitpython >= 3.1.57", # Security fix for unguarded git option forwarding (GHSA-42)
     "cryptography >= 46.0.7" # Security fix for CVE-2024-41126
 ]
 
