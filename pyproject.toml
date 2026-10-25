@@ -19,8 +19,13 @@ dependencies = [
     "requests",
     "google-generativeai",
     "groq",
-    "gitpython >= 3.1.62", # Security fix for --separate-git-dir arbitrary git-dir creation
-    "cryptography >= 46.0.7" # Security fix for CVE-2024-41126
+    "gitpython >= 3.2.1", # Security fix for GitPython vulnerabilities
+    "cryptography >= 46.0.7", # Security fix for CVE-2024-41126
+    "pillow >= 13.0.0; python_full_version >= '3.11'", # Security fix for Pillow critical vulnerabilities
+    "pillow >= 12.3.0; python_full_version < '3.11'",
+    "certifi >= 2026.10.23", # Security fix for Certifi root certificate vulnerability
+    "filelock >= 4.2.4; python_full_version >= '3.11'", # Security fix for filelock
+    "virtualenv >= 21.14.13; python_full_version >= '3.11'" # Security fix for virtualenv
 ]
 
 [dependency-groups]
