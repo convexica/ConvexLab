@@ -1,7 +1,6 @@
 import datetime
 import logging
 import time
-import urllib.request
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -86,20 +85,25 @@ class MFDataFetcher:
     def _sync_from_cloud_cache(self, filename: str) -> bool:
         """Attempt to download pre-warmed cache from the dedicated 'data-cache' branch."""
         try:
+            # Validate filename to prevent path traversal
+            safe_filename = Path(filename).name
+            if not safe_filename or safe_filename != filename:
+                logger.warning(f"Invalid filename for cloud cache sync: {filename}")
+                return False
+
             # Using raw.githubusercontent.com to fetch the latest CSV from our orphan branch
             # Repository URL is derived from established professional metadata
             repo_base = "https://raw.githubusercontent.com/convexica/convexlab/data-cache"
-            url = f"{repo_base}/data/cache/{filename}"
+            url = f"{repo_base}/data/cache/{safe_filename}"
 
-            target_path = self.cache_dir / filename
+            target_path = self.cache_dir / safe_filename
 
-            req = urllib.request.Request(url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=10) as response:
-                if response.status == 200:
-                    with open(target_path, "wb") as f:
-                        f.write(response.read())
-                    log_event(logger, "CLOUD_CACHE_SYNC", filename=filename, status="Success")
-                    return True
+            response = self.session.get(url, headers=self.headers, timeout=10)
+            if response.status_code == 200:
+                with open(target_path, "wb") as f:
+                    f.write(response.content)
+                log_event(logger, "CLOUD_CACHE_SYNC", filename=safe_filename, status="Success")
+                return True
         except Exception as e:
             # Silent fallback if cloud sync fails
             logger.debug(f"Cloud cache sync skipped for {filename}: {e}")
@@ -134,9 +138,9 @@ class MFDataFetcher:
         for attempt in range(max_attempts):
             try:
                 # Add jitter to avoid synchronized stampede from cloud nodes
-                import random
+                import secrets
 
-                delay = (base_delay**attempt) + random.random()
+                delay = (base_delay**attempt) + secrets.SystemRandom().random()
                 if attempt > 0:
                     time.sleep(delay)
 
@@ -176,8 +180,8 @@ class MFDataFetcher:
                 if len(_self._all_schemes) > 0:
                     logger.warning("Using EXPIRED scheme index cache due to API failure.")
                     return _self._all_schemes
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Expired scheme index cache load failed: {e}")
 
         raise ConnectionError("Unable to load mutual fund index from AMFI. The service may be temporarily down. Please refresh in a few minutes.")
 
@@ -275,8 +279,8 @@ class MFDataFetcher:
                 df["date"] = pd.to_datetime(df["date"])
                 df = df.sort_values("date").set_index("date")
                 return df
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Expired fund cache load failed for {amfi_code}: {e}")
 
         raise ConnectionError(f"Unable to fetch NAV for fund {amfi_code}. API down and no cache available.")
 

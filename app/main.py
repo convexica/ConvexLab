@@ -304,7 +304,7 @@ if selected_code:
                 req_yrs = int(analysis_period.split(" ")[0])
                 if actual_yrs < (req_yrs - 0.1):  # If significantly shorter than requested
                     is_si = True
-            except Exception:
+            except (ValueError, IndexError):
                 pass
 
         if analysis_period != "Custom Range":
