@@ -174,8 +174,9 @@ with st.sidebar:
         # Institutional-Grade: Comprehensive mapping of standard Indian indices
         INDEX_MAPPING = {"Nifty 50": "^NSEI", "Nifty Next 50": "^NSMIDCP", "Nifty 100": "^CNX100", "Nifty 200": "^CNX200", "Nifty 500": "^CRSLDX"}
         bench_option = st.selectbox("Index", options=list(INDEX_MAPPING.keys()), index=0, label_visibility="collapsed")
-        benchmark_ticker = INDEX_MAPPING[bench_option]
-        benchmark_name = bench_option
+        if bench_option:
+            benchmark_ticker = INDEX_MAPPING[bench_option]
+            benchmark_name = bench_option
     else:
         bench_search = st.text_input("Benchmark Fund Search", placeholder="Search Benchmark Fund (e.g. Nifty Index Fund)", label_visibility="collapsed")
         if bench_search:
@@ -189,7 +190,7 @@ with st.sidebar:
         "<p style='border-top: 1px solid rgba(255,255,255,0.1); margin-top: 25px; padding-top: 10px; font-weight: 700; font-size: 1.1rem;'>⏳ Horizon</p>",
         unsafe_allow_html=True,
     )
-    analysis_period = st.radio("Period", ["All Time", "1 Year", "3 Years", "5 Years", "10 Years", "Custom Range"], index=0, label_visibility="collapsed")
+    analysis_period = st.radio("Period", ["All Time", "1 Year", "3 Years", "5 Years", "10 Years", "Custom Range"], index=0, label_visibility="collapsed") or "All Time"
 
     import datetime
 
