@@ -1,21 +1,32 @@
 # --- Institutional Quantitative Dashboard ---
-streamlit
-pandas
-numpy
-plotly
-yfinance
-scipy
-statsmodels
-playwright
-requests
+streamlit>=1.42.0
+pandas>=2.2.0
+numpy>=1.26.0
+plotly>=5.24.0
+yfinance>=0.2.50
+scipy>=1.13.0
+statsmodels>=0.14.0
+playwright>=1.49.0
+requests>=2.32.0
+
 # --- AI Synthesis Engine (v1.1.0 Update) ---
-groq
-google-generativeai
+groq>=0.15.0
+google-generativeai>=0.8.3
+
+# --- Security Hardening Overrides (Dependabot / Vulnerability Mitigation) ---
+gitpython>=3.2.1
+cryptography>=46.0.7
+pillow>=13.0.0
+certifi>=2026.10.23
+filelock>=4.2.4
+virtualenv>=21.14.13
+pyasn1>=0.6.5
+pygments>=2.20.0
 
 # --- Professional Toolchain (Local Only) ---
-pytest
-ruff
-mypy
-pre-commit
-pandas-stubs
-types-requests
+pytest>=9.0.3
+ruff>=0.8.0
+mypy>=1.14.0
+pre-commit>=4.0.0
+pandas-stubs>=2.2.0
+types-requests>=2.32.0
