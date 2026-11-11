@@ -6,7 +6,7 @@ authors = [
     {name = "Convexica", email = "app@convexica.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "streamlit",
     "pandas",
@@ -21,11 +21,10 @@ dependencies = [
     "groq",
     "gitpython >= 3.2.1", # Security fix for GitPython vulnerabilities
     "cryptography >= 46.0.7", # Security fix for CVE-2024-41126
-    "pillow >= 13.0.0; python_full_version >= '3.11'", # Security fix for Pillow critical vulnerabilities
-    "pillow >= 12.3.0; python_full_version < '3.11'",
+    "pillow >= 13.0.0", # Security fix for Pillow critical vulnerabilities
     "certifi >= 2026.10.23", # Security fix for Certifi root certificate vulnerability
-    "filelock >= 4.2.4; python_full_version >= '3.11'", # Security fix for filelock
-    "virtualenv >= 21.15.6; python_full_version >= '3.11'", # Security fix for virtualenv
+    "filelock >= 4.2.10", # Security fix for filelock
+    "virtualenv >= 21.15.6", # Security fix for virtualenv
     "pyasn1 >= 0.6.5" # Security fix for pyasn1 vulnerability (Dependabot alert #126)
 ]
 
@@ -55,7 +54,7 @@ testpaths = ["tests"]
 pythonpath = [".", "app"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 warn_return_any = false
 warn_unused_configs = true
 disallow_untyped_defs = false

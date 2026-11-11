@@ -22,7 +22,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Run Pre-warm Script
         run: uv run python scripts/pre_warm_cache.py
