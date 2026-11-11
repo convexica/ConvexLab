@@ -1,3 +1,4 @@
+import html
 import os
 import re
 import sys
@@ -311,15 +312,22 @@ if selected_code:
         if analysis_period != "Custom Range":
             display_label = f"S.I. (~{actual_yrs:.1f}Y)" if (is_si or analysis_period == "All Time") else analysis_period
 
-        # Fund Title & Stats Summary (Zero Margin)
-        st.markdown(f"<h2 style='margin-top: 0rem; margin-bottom: 0rem;'>{selected_name}</h2>", unsafe_allow_html=True)
+        # Fund Title & Stats Summary (Zero Margin with HTML escaping for XSS prevention)
+        safe_selected_name = html.escape(str(selected_name))
+        safe_bench_name = html.escape(str(benchmark_name))
+        safe_display_label = html.escape(str(display_label))
+        safe_scheme_type = html.escape(str(fund_info.get("scheme_type", "N/A")))
+        safe_scheme_cat = html.escape(str(fund_info.get("scheme_category", "N/A")))
+        safe_fund_house = html.escape(str(fund_info.get("fund_house", "N/A")))
+
+        st.markdown(f"<h2 style='margin-top: 0rem; margin-bottom: 0rem;'>{safe_selected_name}</h2>", unsafe_allow_html=True)
         st.markdown(
             f"<p style='color: #e2e8f0; font-size: 0.92rem; margin-top: -0.6rem; margin-bottom: 0.9rem;'>"
-            f"{fund_info.get('scheme_type', 'N/A')} | "
-            f"{fund_info.get('scheme_category', 'N/A')} | "
-            f"{fund_info.get('fund_house', 'N/A')} | "
-            f"⚖️ <span style='font-weight: 600;'>Benchmark:</span> <span style='color: #d4af37; font-weight: 600;'>{benchmark_name}</span> | "
-            f"⏳ <span style='font-weight: 600;'>Horizon:</span> <span style='color: #d4af37; font-weight: 600;'>{display_label}</span>"
+            f"{safe_scheme_type} | "
+            f"{safe_scheme_cat} | "
+            f"{safe_fund_house} | "
+            f"⚖️ <span style='font-weight: 600;'>Benchmark:</span> <span style='color: #d4af37; font-weight: 600;'>{safe_bench_name}</span> | "
+            f"⏳ <span style='font-weight: 600;'>Horizon:</span> <span style='color: #d4af37; font-weight: 600;'>{safe_display_label}</span>"
             f"</p>",
             unsafe_allow_html=True,
         )
@@ -735,20 +743,22 @@ if selected_code:
                 elif curr:
                     sects[curr] += line + "\n"
 
-            # Clean and sanitize the sections: Convert remaining Markdown to Institutional HTML
+            # Clean and sanitize the sections: Convert remaining Markdown to Institutional HTML with XSS prevention
             def clean_sec(txt):
                 lines = txt.strip().split("\n")
                 res = []
                 for line in lines:
                     cl = line.strip()
-                    # 1. Convert Bolding to Standard White Bold
+                    # 1. HTML-escape raw text to prevent XSS / HTML injection from LLM output
+                    cl = html.escape(cl)
+                    # 2. Convert Bolding to Standard White Bold (safe after escaping)
                     cl = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", cl)
 
-                    # 2. Handle Universal Bullets (* or -)
+                    # 3. Handle Universal Bullets (* or -)
                     if cl.startswith("- ") or cl.startswith("* "):
                         bullet_content = cl[2:].strip()
 
-                        # 3. If Bullet starts with Topic Header (e.g., <b>...:</b>), turn it GOLD
+                        # 4. If Bullet starts with Topic Header (e.g., <b>...:</b>), turn it GOLD
                         bullet_content = re.sub(r"^<b>(.*?):<\/b>", r"<span style='color: #d4af37; font-weight: 700;'>\1:</span>", bullet_content)
 
                         res.append(f'<div class="bullet-item"><span class="bullet-dot">•</span><span class="bullet-text">{bullet_content}</span></div>')

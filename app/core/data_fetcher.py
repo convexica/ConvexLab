@@ -215,9 +215,12 @@ class MFDataFetcher:
 
         return results
 
-    def _get_cache_path(self, amfi_code):
-        """Return the path to the cached file for a fund."""
-        return self.cache_dir / f"{amfi_code}.csv"
+    def _get_cache_path(self, amfi_code: str) -> Path:
+        """Return the path to the cached file for a fund, validating numeric scheme code."""
+        code_str = str(amfi_code).strip()
+        if not code_str.isdigit():
+            raise ValueError(f"Invalid AMFI scheme code: {amfi_code}")
+        return self.cache_dir / f"{code_str}.csv"
 
     def _is_cache_valid(self, cache_path, max_age_hours=12):
         """Check if the cached file exists and is not too old."""
