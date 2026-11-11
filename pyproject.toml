@@ -25,7 +25,7 @@ dependencies = [
     "pillow >= 12.3.0; python_full_version < '3.11'",
     "certifi >= 2026.10.23", # Security fix for Certifi root certificate vulnerability
     "filelock >= 4.2.4; python_full_version >= '3.11'", # Security fix for filelock
-    "virtualenv >= 21.14.13; python_full_version >= '3.11'", # Security fix for virtualenv
+    "virtualenv >= 21.15.6; python_full_version >= '3.11'", # Security fix for virtualenv
     "pyasn1 >= 0.6.5" # Security fix for pyasn1 vulnerability (Dependabot alert #126)
 ]
 
