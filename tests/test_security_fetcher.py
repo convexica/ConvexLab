@@ -61,6 +61,18 @@ def test_get_fund_info_traversal_rejected():
         fetcher.get_fund_info("")
 
 
+def test_get_nav_history_traversal_rejected():
+    fetcher = MFDataFetcher()
+    with pytest.raises(ValueError):
+        fetcher.get_nav_history("../traversal")
+    with pytest.raises(ValueError):
+        fetcher.get_nav_history("dir/scheme")
+    with pytest.raises(ValueError):
+        fetcher.get_nav_history("abc123")
+    with pytest.raises(ValueError):
+        fetcher.get_nav_history("")
+
+
 def test_get_current_risk_free_rate_anomalous_discarded():
     fetcher = MFDataFetcher()
     mock_response = MagicMock()

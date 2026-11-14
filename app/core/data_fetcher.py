@@ -248,8 +248,9 @@ class MFDataFetcher:
                 logger.warning(f"Persistent cache read failed for {amfi_code}: {e}")
 
         # 2. API Fallback
-        logger.info(f"Cache Miss for fund {amfi_code}. Fetching from AMFI API...")
-        url = f"https://api.mfapi.in/mf/{amfi_code}"
+        code_str = cache_path.stem
+        logger.info(f"Cache Miss for fund {code_str}. Fetching from AMFI API...")
+        url = f"https://api.mfapi.in/mf/{code_str}"
         for attempt in range(3):
             try:
                 response = _self.session.get(url, headers=_self.headers, timeout=20)
