@@ -290,7 +290,10 @@ class MFDataFetcher:
     @st.cache_data(ttl=86400, show_spinner=False)
     def get_fund_info(_self, amfi_code: str) -> dict[str, Any]:
         """Get detailed fund info using API."""
-        url = f"https://api.mfapi.in/mf/{amfi_code}"
+        code_str = str(amfi_code).strip()
+        if not code_str.isdigit():
+            raise ValueError(f"Invalid AMFI scheme code: {amfi_code}")
+        url = f"https://api.mfapi.in/mf/{code_str}"
         for _attempt in range(3):
             try:
                 response = _self.session.get(url, headers=_self.headers, timeout=20)
@@ -353,8 +356,11 @@ class MFDataFetcher:
 
                 if match:
                     rate = float(match.group(1))
-                    log_event(logger, "RF_FETCH_SUCCESS", source="TradingEconomics", rate=rate)
-                    return rate / 100
+                    # Macro sanity validation: Ensure rate is within realistic macroeconomic bounds (0% to 25%)
+                    if 0.0 <= rate <= 25.0:
+                        log_event(logger, "RF_FETCH_SUCCESS", source="TradingEconomics", rate=rate)
+                        return rate / 100
+                    logger.warning(f"Discarding anomalous risk-free rate from TradingEconomics: {rate}%")
         except Exception as e:
             log_event(logger, "RF_FETCH_ERROR", level="warning", source="TradingEconomics", error=str(e))
 

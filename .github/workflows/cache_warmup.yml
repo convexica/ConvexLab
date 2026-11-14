@@ -56,6 +56,8 @@ jobs:
           # 4. Commit and push
           git add data/cache/
           git commit -m "chore(data): Daily institutional cache refresh [skip ci]" || echo "No changes to commit"
+          # Institutional-Grade: Configure credential header securely without exposing token in command line or URL
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${GITHUB_TOKEN}" | base64)"
+          git remote set-url origin "https://github.com/${{ github.repository }}.git"
           # Force push because this is a transient data branch
-          # Institutional-Grade: Explicitly use token in push URL for guaranteed authorization
-          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}" data-cache --force
+          git push origin data-cache --force

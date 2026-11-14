@@ -4,3 +4,15 @@ backgroundColor = "#0f172a"       # Deep Navy Surface
 secondaryBackgroundColor = "#1e293b" # Charcoal
 textColor = "#e2e8f0"             # Silver Text
 font = "sans serif"
+
+[server]
+enableCORS = true
+enableXsrfProtection = true
+enableStaticServing = false
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = false

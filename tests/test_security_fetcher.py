@@ -47,3 +47,27 @@ def test_sync_from_cloud_cache_mocked_success(tmp_path):
         target_file = tmp_path / "test_fund.csv"
         assert target_file.exists()
         assert target_file.read_bytes() == b"date,nav\n2026-01-01,100.0\n"
+
+
+def test_get_fund_info_traversal_rejected():
+    fetcher = MFDataFetcher()
+    with pytest.raises(ValueError):
+        fetcher.get_fund_info("../traversal")
+    with pytest.raises(ValueError):
+        fetcher.get_fund_info("dir/scheme")
+    with pytest.raises(ValueError):
+        fetcher.get_fund_info("abc123")
+    with pytest.raises(ValueError):
+        fetcher.get_fund_info("")
+
+
+def test_get_current_risk_free_rate_anomalous_discarded():
+    fetcher = MFDataFetcher()
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.text = '{"Value": 99.99}'
+
+    with patch.object(fetcher.session, "get", return_value=mock_response):
+        rate = fetcher.get_current_risk_free_rate()
+        # Anomalous rate > 25% must be discarded, falling back to 0.065
+        assert rate == 0.065

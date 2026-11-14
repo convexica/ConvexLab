@@ -212,12 +212,13 @@ with st.sidebar:
     )
     # Fetch real-time rate for initial calibration (fallback to 6.5)
     default_rf = fetcher.get_current_risk_free_rate() * 100
-    risk_free_rate = st.slider("Risk-Free Rate (%)", 0.0, 10.0, default_rf, 0.1) / 100
+    safe_rf = max(0.0, min(10.0, float(default_rf)))
+    risk_free_rate = st.slider("Risk-Free Rate (%)", 0.0, 10.0, safe_rf, 0.1) / 100
     analytics.rf = risk_free_rate
 
     st.markdown("---")
-    if st.sidebar.button("♻️ Refresh System"):
-        st.cache_resource.clear()
+    if st.sidebar.button("♻️ Reset View"):
+        st.session_state.clear()
         st.rerun()
 
 # Main Content
