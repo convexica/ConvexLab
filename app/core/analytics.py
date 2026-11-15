@@ -635,8 +635,8 @@ class MFAnalytics:
                 response = model.generate_content(markdown_brief)
                 return response.text
             except Exception as e:
-                logger.error(f"Gemini generation failed: {e}")
-                return f"⚠️ **AI Execution Error:** {e}\n\nFalling back to the briefing below for manual analysis."
+                logger.error(f"Gemini generation failed: {e}", exc_info=True)
+                return "⚠️ **AI Execution Error:** Live synthesis could not be completed. Please refer to the briefing below for manual analysis."
 
         # 3. Fallback: Return a helpful message if no keys are configured
         return (

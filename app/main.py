@@ -767,8 +767,9 @@ if selected_code:
                         res.append(cl)
                 return "".join(res)
 
-            # Build the Single, Atomic HTML block using a refined Institutional Layout
-            report_html = f"""<style>
+            if any(s.strip() for s in sects.values()):
+                # Build the Single, Atomic HTML block using a refined Institutional Layout
+                report_html = f"""<style>
 .brief-container {{
     background-color: #1e293b;
     padding: 30px;
@@ -817,9 +818,11 @@ if selected_code:
 <div class="brief-content" style="margin-bottom: 0px !important;">{clean_sec(sects["[ACTIONABLES]"])}</div>
 </div>"""
 
-            st.markdown("### 📝 Investment Brief")
-            st.markdown(report_html, unsafe_allow_html=True)
-            st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("### 📝 Investment Brief")
+                st.markdown(report_html, unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+            else:
+                st.info(raw)
 
     else:
         st.error("Historical NAV data unavailable.")

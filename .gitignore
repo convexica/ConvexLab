@@ -24,7 +24,8 @@ data/*
 data/cache/*
 !data/cache/scheme_index.json
 cookies.txt
-.env
+.env*
+!.env.example
 *.log
 *.bak
 *.tmp
