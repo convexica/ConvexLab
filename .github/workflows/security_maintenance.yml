@@ -1,0 +1,59 @@
+name: Security & Dependency Maintenance
+
+on:
+  schedule:
+    # Run every Sunday night at 02:00 UTC (07:30 IST) before market week starts
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  maintenance:
+    name: Audit & Upgrade Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.11"
+
+      - name: Upgrade Lockfile & Run Audit
+        run: |
+          uv lock --upgrade
+          uv run --with pip-audit pip-audit
+
+      - name: Run Test Suite
+        run: |
+          uv run pytest tests/
+          uv run ruff check .
+          uv run mypy app/
+
+      - name: Create Pull Request if Updates Available
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(security): weekly automated lockfile upgrade & vulnerability audit"
+          title: "chore(security): weekly dependency maintenance & lockfile upgrade"
+          body: |
+            ### Automated Security & Dependency Maintenance
+
+            This weekly automated maintenance run has:
+            1. Upgraded all packages in `uv.lock` via `uv lock --upgrade`.
+            2. Run `pip-audit` to confirm zero known vulnerabilities.
+            3. Successfully verified all tests (`pytest`, `ruff`, `mypy`).
+
+            *Auto-merge will be applied once CI checks pass.*
+          branch: "automated/security-maintenance"
+          delete-branch: true
+          auto-merge: true
+          labels: |
+            dependencies
+            security
+            automated
