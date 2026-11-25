@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v7
@@ -56,10 +58,8 @@ jobs:
           # 4. Commit and push
           git add data/cache/
           if git commit -m "chore(data): Daily institutional cache refresh [skip ci]"; then
-            # Institutional-Grade: Configure credential header securely without exposing token in command line or URL
-            # Ensure base64 string is strictly single-line without newline wrapping (POSIX tr -d '\r\n')
-            B64_TOKEN=$(echo -n "x-access-token:${GITHUB_TOKEN}" | base64 | tr -d '\r\n')
-            git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${B64_TOKEN}"
+            # Institutional-Grade: Ensure reliable push using standard Actions token
+            git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
             # Force push because this is a transient data branch
             git push origin data-cache --force
           else
